@@ -1,0 +1,44 @@
+name: github.com/opspec-pkgs/git.repo.fetch-https
+description: fetches a git repo via https transport
+inputs:
+  dstRepo:
+    dir:
+      description: destination of the fetch
+      default: .
+  srcRepo:
+    string:
+      description: source to fetch from; can be a Url or name of a remote
+      default: " "
+  refSpec:
+    string:
+      description: spec of refs to fetch (in srcRefPattern:dstRefPattern format); see https://git-scm.com/book/en/v2/Git-Internals-The-Refspec for details
+      default: " "
+  username:
+    string:
+      constraints: { minLength: 1 }
+      description: username for source auth
+  password:
+    string:
+      constraints: { minLength: 1 }
+      description: password for source auth
+      isSecret: true
+outputs:
+  dstRepo:
+    dir:
+      description: destination of the fetch
+opspec: 0.1.6
+version: 1.0.0
+run:
+  container:
+    cmd: [ /cmd.sh ]
+    dirs:
+      /dstRepo: $(dstRepo)
+    files:
+      /cmd.sh:
+    envVars:
+      srcRepo:
+      refSpec:
+      username:
+      password:
+    image: { ref: 'opspecpkgs/git.repo.fetch-https:1.0.0' }
+    workDir: /dstRepo
